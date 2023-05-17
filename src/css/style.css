@@ -1,4 +1,422 @@
+:root{
+    /* general */
+    --uhi_white: #ffffff;
+    --uhi_black: #000000;
+
+    /* shades */
+    --uhi_grey-light: #f7f7f7;
+    --uhi_grey-mid: #a6a6a6;
+    --uhi_grey-dark: #767676;
+
+    /* colours */
+    --uhi_purple: #7655D2;
+    --uhi_teal: #298289;
+    --uhi_red: #9E2A2B;
+    --uhi_blue: #005587;
+    --uhi_orange: #F87A46;
+    --uhi_yellow: #FFBB50;
+}
+
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+*,
+*::after,
+*::before{
+    box-sizing: inherit;
+}
+
+html{
+    font-size: 100%;
+    line-height: 1.15;
+}
+
+body{
+    color: var(--uhi_white);
+    font-size: 1rem;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ######################################################################################## */
+                                /* GLOBALS */
+/* ######################################################################################## */
+
+a{
+    text-decoration: none;
+    color: var(--uhi_white);
+    font-size: 1.125rem;
+ }
+
+ a:hover{
+    cursor: pointer;
+ }
+
+ li{
+    list-style: none;
+    padding: 0 0.3rem;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+ }
+
+ ul{
+    display: inline-flex;
+ }
+
+ img{
+    max-width: 100%;
+    vertical-align: middle;
+    border-style: none;
+ }
+
+ hr{
+    height: 0;
+    margin-top: 40px;
+    box-sizing: content-box;
+    overflow: visible;
+    margin-left: 3rem;
+    margin-right: 3rem;
+    background-color: var(--uhi_grey-mid);
+ }
+
+ button{
+    border: none;
+    padding: 0.6rem 1.8rem;
+ }
+
+ button:hover{
+    cursor: pointer;
+ }
+
+/* ######################################################################################## */
+                                /* TEXT | FONT */
+/* ######################################################################################## */
+h1{
+    font-size: 3.375rem;
+}
+
+h2{
+    font-size: 1.728rem;
+}
+
+.p-subhead{
+    font-size: 1.5rem;
+    margin-bottom: 0.6rem;
+}
+
+p{
+    font-size: 1.125rem;
+    margin: 1rem 0;
+}
+
+em{
+    font-style: italic;
+}
+
+
+/* ######################################################################################## */
+                                /* IMAGES */
+/* ######################################################################################## */
+.toolbar__dropdown{
+    width: 20px;
+    height: 20px;
+}
+
+#uhi_logo{
+    height: 35px;
+    padding-top: 0.75rem;
+    margin-left: 3rem;
+}
+
+/* ######################################################################################## */
+                                /* VR MODEL */
+/* ######################################################################################## */
 a-scene {
-    height: 300px;
-    width: 600px;
+    height: 720px;
+    width: 960px;
+    border: 3px solid var(--uhi_black);
+    border-radius: 3px;
+}
+
+#embeddedScene{
+    display: flex;
+    justify-content: center;
+    max-width: 100%;
+    max-height: 100%;
+    margin: 2rem 0;
+}
+
+@media (max-width: 1280px){
+    a-scene{
+        height: 560px;
+        width: 90%;
+    }
+}
+
+
+
+/* ######################################################################################## */
+                                /* HEADER AND NAVBAR */
+/* ######################################################################################## */
+
+#uhi_header{
+    width: 100%;
+    height: auto;
+}
+
+#header__toolbar{
+    width: 100%;
+    height: auto;
+    background-color: var(--uhi_grey-dark);
+    display: flex;
+    justify-content: end;
+    font-size: 0.813rem;
+}
+
+#header__toolbar ul li{
+    padding: 0.5rem 1rem
+}
+
+#header__toolbar ul li a{
+    font-size: 0.813rem;
+}
+
+#header__toolbar ul, #uhi_navbar ul{
+    padding-right: 3rem;
+}
+
+#uhi_navbar{
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--uhi_black);
+    height: 60px;
+}
+
+#uhi_navbar ul li a{
+    padding: 0 0.625rem;
+}
+
+#uhi_navbar ul li i{
+    transform: rotate(90deg);
+}
+
+#header__toolbar i{
+    transition: transform 0.3s ease;
+}
+
+#header__toolbar i:hover{
+    transform: rotate(180deg);
+}
+
+@media (max-width: 1280px){
+    #uhi_navbar ul li a{
+        color: transparent;
+    }
+}
+
+/* ######################################################################################## */
+                                /* SECTION - VR TUTORIAL */
+/* ######################################################################################## */
+#vr_tutorial{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+#vr_tutorial #toggle_button{
+    display: block;
+    width: 60%;
+    text-align: left;
+    background-color: var(--uhi_grey-light);
+    color: var(--uhi_black);
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+#vr_tutorial #toggle_button.active{
+    background-color: var(--uhi_grey-mid);
+}
+
+#vr_tutorial #toggle_button i{
+    transition: transform 0.3s ease;
+}
+
+#vr_tutorial #user_guide{
+    width: 60%;
+    margin-top: 1rem;
+    padding: 1.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: var(--uhi_grey-light);
+    color: var(--uhi_black);
+}
+
+/* button -span */
+#vr_tutorial #toggle_button span{
+    padding-left: 1rem;
+    font-size: 1.6rem;
+}
+
+.hide{
+    display: none;
+}
+
+/* user guide -- user controls div */
+#user_guide .user_controls img:nth-child(1){
+    width: 36px;
+    height: 36px;
+    padding-right: 0.4rem;
+}
+
+#user_guide .user_controls ul{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+    /* margin-left: 2rem; */
+}
+
+#user_guide .user_controls ul li{
+    margin-bottom: 0.8rem;
+}
+
+#user_guide .user_controls .shift_left{
+    padding-left: 1rem;
+}
+
+#user_guide .user_controls i{
+    padding: 1rem;
+}
+
+#user_guide .user_divider{
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 1200px){
+    #vr_tutorial #toggle_button{
+        width: 85%;
+    }
+
+    #vr_tutorial #user_guide{
+        width: 85%;
+    }
+}
+
+
+/* ######################################################################################## */
+                                /* FOOTER */
+/* ######################################################################################## */
+
+#uhi_footer{
+    background-color: var(--uhi_black);
+    color: var(--uhi_white);
+    border-top: 8px solid var(--uhi_purple);
+    margin-top: 3.125rem;
+}
+
+#uhi_footer a{
+    font-weight: bold;
+}
+
+
+/* FOOTER LINKS */
+.footer__links{
+    padding-top: 3.75rem;
+}
+
+.footer__links, .footer__socialdesk, .footer__statement{
+    margin: 0px 3rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.footer__links .site p, .footer__links .partners p{
+    font-weight: bold;
+}
+
+.footer__links .site ul, .footer__links .partners ul{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.footer__links .site ul li, .footer__links .partners ul li{
+    padding: 0.313rem 0;
+}
+
+.footer__links .site ul li a, .footer__links .partners ul li a{
+    color: var(--uhi_grey-mid);
+}
+
+.footer__links .partners{
+    flex-basis: 55%;
+}
+
+.footer__links .partners p:last-child, .footer__links .partners p a{
+    font-size: 0.875rem;
+    color: var(--uhi_grey-mid);
+}
+
+.footer__links .partners .footer-highlight{
+    color: var(--uhi_white);
+}
+
+
+/* SOCIAL DESK  */
+.footer__socialdesk{
+    padding-top: 0;
+}
+
+.footer__socialdesk ul li{
+    padding: 0 0.5rem;
+}
+
+.footer__socialdesk ul li a i{
+    color: var(--uhi_white);
+}
+
+.footer__socialdesk .servicedesk{
+    background-color: var(--uhi_white);
+    padding: 0 20px;
+    border-radius: 3px;
+}
+
+.footer__socialdesk .servicedesk a{
+    color: var(--uhi_black);
+    font-size: 18px;
+}
+
+.footer__socialdesk .servicedesk a:hover{
+    text-decoration: underline;
+}
+
+.footer__statement p, .footer__statement a{
+    font-size: 0.875rem;
+    color: var(--uhi_grey-mid);
+}
+
+.footer__statement .charity{
+    flex-basis: 55%;
+}
+
+@media (max-width: 1280px){
+    
+    .footer__links, .footer__socialdesk, .footer__statement{
+        flex-direction: column;
+        padding: 1.5rem 0;
+    }
+
+    .footer__socialdesk .servicedesk{
+        width: 25%;
+        margin-top: 2rem;
+    }
 }
