@@ -1,0 +1,986 @@
+
+<!--
+    Development build version: 0.1
+    Build date: 02/03/2023
+    Author: Bsc Team Project Group 2023
+
+noscript
+
+-->
+
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    
+    <!-- META TAGS START-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- META TAGS END-->
+
+    <!-- EXTERNAL JAVASCRIPT START -->
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
+    <script src="classes/hotpoints.js"></script>
+    <script src="classes/menus.js"></script>
+    <script src="classes/key-controller.js"></script>
+    <script src="classes/current-location.js"></script>
+    <script src="classes/navigation.js"></script>
+    <!-- EXTERNAL JAVASCRIPT END -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- EXTERNAL CSS START -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- EXTERNAL CSS END -->
+
+    
+    <script>
+
+        AFRAME.registerComponent('hotpoint', {
+            schema: {
+                room:{type:"string",default:""},
+                points: {type:"string", default:""},
+            },
+    
+            init: function() {
+    
+                var newSky = this.data.room;
+                var newPoints = this.data.points;
+                var active="Entrance-blockPoint1";
+    
+                this.setSky = function() {
+                    var sky = document.querySelector('#img-360');
+                    sky.setAttribute("src", newSky);
+    
+                    // Add these lines to update the current entity display text
+                    const camera = document.querySelector('[camera]');
+                    const currentEntityDisplay = camera.components['current-entity-display'];
+                    if (currentEntityDisplay) {
+                    currentEntityDisplay.updateCurrentEntity();
+                    }
+                }
+    
+                this.setHidden = function() {
+                    var current_hotpoint = this.parentElement.getAttribute("id");
+                    var hotpoint = document.querySelector('#'+current_hotpoint);
+                    hotpoint.setAttribute("scale","0 0 0");
+                }
+    
+                this.setVisible = function() {
+                    var newPoint = document.querySelector('#'+newPoints);
+                    newPoint.setAttribute("scale","1 1 1");
+    
+                    active=""+newPoint.getAttribute("id");
+    
+                    var dropdown = document.querySelector('#dropdown');
+                    var childs = dropdown.querySelectorAll('a-entity');
+    
+                    // Access childs
+                    childs.forEach(function(childE) {
+                        //console.log("childs:"+childE.getAttribute("id"));
+                        var navItem = document.querySelector("#"+childE.getAttribute("id"));
+                        navItem.setAttribute("data-active", active);
+                        console.log("Active: "+childE.getAttribute("data-active"));
+                    });
+                    // document.getElementById("#"+newPoints).hidden = false; newPoints.setAttribute("visible", "true");
+                }
+    
+                this.main = function() {
+                    this.setHidden;
+                    this.setSky;
+                    this.setVisible;
+                }
+    
+                this.el.addEventListener('click', this.setSky);
+                this.el.addEventListener('click', this.setHidden);
+                this.el.addEventListener('click', this.setVisible);
+    
+            },
+            update: function() {},
+            remove: function() {
+                this.el.removeEventListener('click', this.setSky);
+                this.el.removeEventListener('click', this.setHidden);
+                this.el.removeEventListener('click', this.setVisible);
+            }
+        })
+    
+        </script>
+
+  </head>
+
+  <body>
+
+    <!-- Header and Navbar -->
+    <header id="uhi_header">
+        <div id="header__toolbar">
+            <ul>
+                <li><a href="#">Current students</a></li>
+                <li><a href="#">Staff</a></li>
+                <li><a href="#">Alumni</a></li>
+                <li><a href="#">Translate <i class="fa-solid fa-caret-down fa-xl" style="color: #ffffff;"></i></a></li>
+            </ul>
+        </div>
+        <div id="uhi_navbar">
+            <img id="uhi_logo" src="img/uhi-logo.png" alt="uhi logo | banner">
+
+            <ul>
+                <li><a href="#">Courses</a></li>
+                <li><a href="#">Study with us</a></li>
+                <li><a href="#">Campuses</a></li>
+                <li><a href="#">Research</a></li>
+                <li><a href="#">Businesses</a></li>
+                <li><i class="fa-solid fa-magnifying-glass fa-l" style="color: #ffffff;"></i></li>
+            </ul>
+        </div>
+    </header>
+
+
+    <!-- ////////////////////////////////////////////////////////////////////////// -->
+    <!-- VR MODEL -->
+    <div id="embeddedScene">
+        <a-scene embedded key-controller>
+
+            <!-- ASSESTS START-->
+
+            <img id="hotpoint" src="img/Points/move_v2.png"/>
+            <img id="informationpoint" src="img/Points/info-blue2.png"/>
+            <img id="informationpointBackground" src="img/Points/dec-box.png"/>
+
+            <img id="Front-entranceRoom1" src="img/Front-Entrance/GS__0107.JPG">
+            <img id="Front-entranceRoom2" src="img/Front-Entrance/GS__0106.JPG">
+            <img id="Front-entranceRoom3" src="img/Front-Entrance/GS__0105.JPG">
+            <img id="Front-entranceRoom4" src="img/Front-Entrance/GS__0103.JPG">
+            <img id="Front-entranceRoom5" src="img/Front-Entrance/GS__0102.JPG">
+            <img id="Front-entranceRoom6" src="img/Front-Entrance/GS__0101.JPG">
+
+            <img id="Cafeteria-blockRoom1" src="img/Cafeteria/GS__0100.JPG"/>
+            <img id="Cafeteria-blockRoom2" src="img/Cafeteria/GS__0098.JPG"/> 
+            <img id="Cafeteria-blockRoom3" src="img/Cafeteria/GS__0097.JPG"/> 
+            <img id="Cafeteria-blockRoom4" src="img/Cafeteria/GS__0096.JPG"/> 
+            <img id="Cafeteria-blockRoom5" src="img/Cafeteria/GS__0095.JPG"/> 
+            <img id="Cafeteria-blockRoom6" src="img/Cafeteria/GS__0094.JPG"/> 
+ 
+            <img id="B-blockBottomRoom1" src="img/B-Block-bottom/GS__0089.JPG"/>
+            <img id="B-blockBottomRoom2" src="img/B-Block-bottom/GS__0090.JPG"/>
+            <img id="B-blockBottomRoom3" src="img/B-Block-bottom/GS__0091.JPG"/>
+            <img id="B-blockBottomRoom4" src="img/B-Block-bottom/GS__0092.JPG"/>
+            <img id="B-blockBottomRoom5" src="img/B-Block-bottom/GS__0093.JPG"/>
+
+            <img id="AB-blockRoom1" src="img/AB-block-stairway/GS__0099.JPG"/>
+            <img id="AB-blockRoom2" src="img/AB-block-stairway/GS__0060.JPG"/>
+            <img id="AB-blockRoom3" src="img/AB-block-stairway/GS__0061.JPG"/>
+            <img id="AB-blockRoom4" src="img/AB-block-stairway/GS__0047.JPG"/>
+            <img id="AB-blockRoom5" src="img/AB-block-stairway/GS__0048.JPG"/>
+
+            <img id="B-blockBottomStairwayRoom1" src="img/B-Block-stairway/GS__0085.JPG"/>
+            <img id="B-blockBottomStairwayRoom2" src="img/B-Block-stairway/GS__0086.JPG"/>
+            <img id="B-blockBottomStairwayRoom3" src="img/B-Block-stairway/GS__0087.JPG"/>
+            <img id="B-blockBottomStairwayRoom4" src="img/B-Block-stairway/GS__0088.JPG"/>
+
+            <img id="B-blockTopRoom1" src="img/B-Block-top floor/GS__0049.JPG"/>
+            <img id="B-blockTopRoom2" src="img/B-Block-top floor/GS__0050.JPG"/>
+            <img id="B-blockTopRoom3" src="img/B-Block-top floor/GS__0051.JPG"/>
+            <img id="B-blockTopRoom4" src="img/B-Block-top floor/GS__0052.JPG"/>
+            <img id="B-blockTopRoom5" src="img/B-Block-top floor/GS__0059.JPG"/>
+            <img id="B-blockTopRoom6" src="img/B-Block-top floor/GS__0058.JPG"/>
+            <img id="B-blockTopRoom7" src="img/B-Block-top floor/GS__0057.JPG"/>
+            <img id="B-blockTopRoom8" src="img/B-Block-top floor/GS__0055.JPG"/>
+            <img id="B-blockTopRoom9" src="img/B-Block-top floor/GS__0056.JPG"/>
+            <img id="B-blockTopRoom10" src="img/B-Block-top floor/GS__0054.JPG"/>
+
+            <img id="ComputingDepartment-blockRoom1" src="img/Computing-Department/GS__0044.JPG"/>
+            <img id="ComputingDepartment-blockRoom2" src="img/Computing-Department/GS__0043.JPG"/>
+            <img id="ComputingDepartment-blockRoom3" src="img/Computing-Department/GS__0045.JPG"/>
+            <img id="ComputingDepartment-blockRoom4" src="img/Computing-Department/GS__0046.JPG"/>
+            <img id="ComputingDepartment-blockRoom5" src="img/Computing-Department/GS__0036.JPG"/>
+            <img id="ComputingDepartment-blockRoom6" src="img/Computing-Department/GS__0037.JPG"/>
+            <img id="ComputingDepartment-blockRoom7" src="img/Computing-Department/GS__0034.JPG"/>
+            <img id="ComputingDepartment-blockRoom8" src="img/Computing-Department/GS__0039.JPG"/>
+            <img id="ComputingDepartment-blockRoom9" src="img/Computing-Department/GS__0040.JPG"/>
+            <img id="ComputingDepartment-blockRoom10" src="img/Computing-Department/GS__0041.JPG"/>
+            <img id="ComputingDepartment-blockRoom11" src="img/Computing-Department/GS__0030.JPG"/>
+
+            <img id="ConstructionDepartment-blockRoom1" src="img/Construction-Department/GS__0062.JPG"/>
+            <img id="ConstructionDepartment-blockRoom2" src="img/Construction-Department/GS__0063.JPG"/>
+            <img id="ConstructionDepartment-blockRoom3" src="img/Construction-Department/GS__0066.JPG"/>
+            <img id="ConstructionDepartment-blockRoom4" src="img/Construction-Department/GS__0067.JPG"/>
+            <img id="ConstructionDepartment-blockRoom5" src="img/Construction-Department/GS__0064.JPG"/>
+            <img id="ConstructionDepartment-blockRoom6" src="img/Construction-Department/GS__0065.JPG"/>
+            <img id="ConstructionDepartment-blockRoom7" src="img/Construction-Department/GS__0068.JPG"/>
+            <img id="ConstructionDepartment-blockRoom8" src="img/Construction-Department/GS__0069.JPG"/>
+            <img id="ConstructionDepartment-blockRoom9" src="img/Construction-Department/GS__0071.JPG"/>
+            <img id="ConstructionDepartment-blockRoom10" src="img/Construction-Department/GS__0073.JPG"/>
+            <img id="ConstructionDepartment-blockRoom11" src="img/Construction-Department/GS__0072.JPG"/>
+            <img id="ConstructionDepartment-blockRoom12" src="img/Construction-Department/GS__0081.JPG"/>
+            <img id="ConstructionDepartment-blockRoom13" src="img/Construction-Department/GS__0082.JPG"/>
+            <img id="ConstructionDepartment-blockRoom14" src="img/Construction-Department/GS__0074.JPG"/>
+            <img id="ConstructionDepartment-blockRoom15" src="img/Construction-Department/GS__0075.JPG"/>
+            <img id="ConstructionDepartment-blockRoom16" src="img/Construction-Department/GS__0076.JPG"/>
+            <img id="ConstructionDepartment-blockRoom17" src="img/Construction-Department/GS__0077.JPG"/>
+            <img id="ConstructionDepartment-blockRoom18" src="img/Construction-Department/GS__0078.JPG"/>
+            <img id="ConstructionDepartment-blockRoom19" src="img/Construction-Department/GS__0079.JPG"/>
+
+            <img id="A-B-Stairway-blockRoom1" src="img/A-Block-stairway/GS__0083.JPG"/>
+            <img id="A-B-Stairway-blockRoom2" src="img/A-Block-stairway/GS__0084.JPG"/>
+            <img id="A-B-Stairway-blockRoom3" src="img/A-Block-stairway/GS__0038.JPG"/>
+
+            <img id="BBlockStairway-blockRoom1" src="img/B-Block-stairway/GS__0085.JPG"/>
+            <img id="BBlockStairway-blockRoom2" src="img/B-Block-stairway/GS__0086.JPG"/>
+            <img id="BBlockStairway-blockRoom3" src="img/B-Block-stairway/GS__0087.JPG"/>
+            <img id="BBlockStairway-blockRoom4" src="img/B-Block-stairway/GS__0088.JPG"/>
+
+            <img id="search" src="img/Asset-Search/Search@3x.png">
+
+
+            <!-- A-SKY START-->
+            <a-sky id="img-360" src="#Front-entranceRoom1"></a-sky>
+            <!-- A-SKY END-->
+
+            <!-- CAMERA START-->
+            <a-camera id="camera" position="0 1.6 0" look-controls current-entity-display camera wasd-controls="enabled:false;">
+                <a-entity 
+                id="cursor" cursor="fuse: true; fuseTimeout: 500" position="0 0 -1"
+                geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03" material="color: black; shader: flat">
+                </a-entity>
+                <a-image
+                    id="location-pin"
+                    src="img/points/location-pin.png"
+                    width="0.075" 
+                    height="0.075" 
+                    position="-1.25 0.78 -1" 
+                    rotation="0 0 0"
+                ></a-image>
+            </a-camera>
+            <!-- CAMERA END-->
+            
+            <!-- NAV CONTROLLER -->
+            <a-entity id="nav-container" position="0 1.6 -5" look-at="#camera" nav-controller>
+                <a-entity 
+                id="toggle" class="clickable" position="0 0 0"
+                event-set="_event: click; scale: 1.1 1.1 1, _event: mouseleave; scale: 1 1 1">
+
+                <a-image id="search" class="clickable" src="#search" width="0.6" height="0.6"></a-image>
+
+            </a-entity>
+                <a-entity id="dropdown" class="nav-dropdown" position="0 -0.3 0" visible="false">
+                    <!-- CORE - START -->
+                    <a-entity 
+                        id="item1" position="-0.8 0.8 0" text="value: Front Entrance; align: center; width: 3"
+                        geometry="primitive: plane; width: 1.2; height: 0.3"
+                        material="color: #333; opacity: 0.4; transparent: true"
+                        class="nav-button" data-scene="Front-entranceRoom1" data-active="Entrance-blockPoint1" data-new="Entrance-blockPoint1"
+                    ></a-entity>
+                    <a-entity 
+                        id="item2" position="0.8 0.8 0" text="value: Cafeteria; align: center; width: 3"
+                        geometry="primitive: plane; width: 1.2; height: 0.3"
+                        material="color: #333; opacity: 0.4; transparent: true"
+                        class="nav-button" data-scene="Cafeteria-blockRoom1" data-active="Entrance-blockPoint1" data-new="Cafeteria-blockPoint1"
+                    ></a-entity>
+                    <!-- CORE - END -->
+
+                    <!-- BLOCKS - START -->
+                    <a-entity 
+                        id="item3" position="-0.8 -0.2 0" text="value: A B Stairwell; align: center; width: 3"
+                        geometry="primitive: plane; width: 1.2; height: 0.3"
+                        material="color: #333; opacity: 0.4; transparent: true"
+                        class="nav-button" data-scene="AB-blockRoom1" data-active="Entrance-blockPoint1" data-new="AB-blockPoint1">
+                    </a-entity>
+                    <a-entity 
+                        id="item4" position="-0.8 -0.6 0" text="value: B Block Top; align: center; width: 3"
+                        geometry="primitive: plane; width: 1.2; height: 0.3"
+                        material="color: #333; opacity: 0.4; transparent: true"
+                        class="nav-button" data-scene="B-blockTopRoom1" data-active="Entrance-blockPoint1" data-new="B-top-departmentPoint1">
+                    </a-entity>
+
+                    <a-entity 
+                        id="item5" position="-0.8 -1 0" text="value: B Block Bottom; align: center; width: 3"
+                        geometry="primitive: plane; width: 1.2; height: 0.3"
+                        material="color: #333; opacity: 0.4; transparent: true"
+                        class="nav-button" data-scene="B-blockBottomRoom1" data-active="Entrance-blockPoint1" data-new="B-blockPoint1">
+                    </a-entity>
+
+
+                    <!-- BLOCKS - END -->
+
+                    <!-- DEPT - START -->
+                    <a-entity 
+                        id="item6" position="0.8 -0.2 0" text="value: Computing Dept; align: center; width: 3"
+                        geometry="primitive: plane; width: 1.2; height: 0.3"
+                        material="color: #333; opacity: 0.4; transparent: true"
+                        class="nav-button" data-scene="ComputingDepartment-blockRoom11" data-active="Entrance-blockPoint1">
+                    </a-entity>
+                    <a-entity 
+                        id="item7" position="0.8 -0.6 0" text="value: Construction Dept; align: center; width: 3"
+                        geometry="primitive: plane; width: 1.2; height: 0.3"
+                        material="color: #333; opacity: 0.4; transparent: true"
+                        class="nav-button" data-scene="ConstructionDepartment-blockRoom1" data-active="Entrance-blockPoint1">
+                    </a-entity>
+                    <!-- DEPT - END -->
+                </a-entity>
+            </a-entity>
+            <!-- NAV CONTROLLER -- END -->
+
+
+            <!-- OCULUS TOUCH-CONTROLS START -->
+            <a-entity laser-controls="hand: right"></a-entity>
+            <!-- OCULUS TOUCH-CONTROLS END -->
+
+            <!-- HOTPOINT NAVIGATION START-->
+                <!-- Front-entrance START-->
+                <a-entity id="Front-entrance">
+                    
+                    <a-entity id="Entrance-blockPoint1" scale="1 1 1" data-sky="#Front-entranceRoom1" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="15 -20 -10" rotation="-90 0 -40" hotpoint="room:#Front-entranceRoom2;points:Entrance-blockPoint2;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="Entrance-blockPoint2" scale="0 0 0" data-sky="#Front-entranceRoom2" data-hotpoint-entities>                        
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-12 -30 0" rotation="-90 0 110" hotpoint="room:#Front-entranceRoom1;points:Entrance-blockPoint1;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="40 -15 8" rotation="-90 0 250" hotpoint="room:#Front-entranceRoom3;points:Entrance-blockPoint3"></a-image>
+                    </a-entity>
+
+                    <a-entity id="Entrance-blockPoint3" scale="0 0 0" data-sky="#Front-entranceRoom3" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-40 -15 10" rotation="-90 0 -50" hotpoint="room:#Front-entranceRoom2;points:Entrance-blockPoint2;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="40 -15 -10" rotation="-90 0 -50" hotpoint="room:#Front-entranceRoom4;points:Entrance-blockPoint4;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="Entrance-blockPoint4" scale="0 0 0" data-sky="#Front-entranceRoom4" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-30 -15 -5" rotation="-90 0 100" hotpoint="room:#Front-entranceRoom3;points:Entrance-blockPoint3;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="0 -15 -50" rotation="-90 0 20" hotpoint="room:#Front-entranceRoom5;points:Entrance-blockPoint5;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="Entrance-blockPoint5" scale="0 0 0" data-sky="#Front-entranceRoom5" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-25 -15 -25" rotation="-90 0 60" hotpoint="room:#Front-entranceRoom4;points:Entrance-blockPoint4;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="35 -15 -30" rotation="-90 0 -30" hotpoint="room:#Front-entranceRoom6;points:Entrance-blockPoint6;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="Entrance-blockPoint6" scale="0 0 0" data-sky="#Front-entranceRoom6" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-40 -15 10" rotation="-90 0 -40" hotpoint="room:#Front-entranceRoom5;points:Entrance-blockPoint5;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="20 -15 40" rotation="-90 0 -140" hotpoint="room:#Cafeteria-blockRoom1;points:Cafeteria-blockPoint1;"></a-image>
+                    </a-entity>
+    
+                </a-entity>
+                <!-- Front-entrance END-->
+
+                <!-- Cafeteria-block START -->
+                <a-entity id="Cafeteria-block">
+                    
+                    <a-entity id="Cafeteria-blockPoint1" scale="0 0 0" data-sky="#Cafeteria-blockRoom1" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="25 -15 35" rotation="-90 0 -130" hotpoint="room:#Cafeteria-blockRoom2;points:Cafeteria-blockPoint2"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-35 -15 -2" rotation="-90 0 100" hotpoint="room:#Front-entranceRoom6;points:Entrance-blockPoint6;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="Cafeteria-blockPoint2" scale="0 0 0" data-sky="#Cafeteria-blockRoom2" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-30 -15 -2" rotation="-90 0 100" hotpoint="room:#Cafeteria-blockRoom1;points:Cafeteria-blockPoint1;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="15 -20 -10" rotation="-90 0 -40" hotpoint="room:#AB-blockRoom1;points:AB-blockPoint1"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="35 -10 10" rotation="-90 0 -90" hotpoint="room:#Cafeteria-blockRoom3;points:Cafeteria-blockPoint3;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="Cafeteria-blockPoint3" scale="0 0 0" data-sky="#Cafeteria-blockRoom3" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="50 -15 20" rotation="-90 0 -100" hotpoint="room:#Cafeteria-blockRoom4;points:Cafeteria-blockPoint4;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-40 -15 -5" rotation="-90 0 90" hotpoint="room:#Cafeteria-blockRoom2;points:Cafeteria-blockPoint2;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="Cafeteria-blockPoint4" scale="0 0 0" data-sky="#Cafeteria-blockRoom4" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-20 -15 -10" rotation="-90 0 70" hotpoint="room:#Cafeteria-blockRoom3;points:Cafeteria-blockPoint3;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="45 -15 0" rotation="-90 0 -70" hotpoint="room:#Cafeteria-blockRoom5;points:Cafeteria-blockPoint5;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="Cafeteria-blockPoint5" scale="0 0 0" data-sky="#Cafeteria-blockRoom5" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-50 -15 0" rotation="-90 0 100" hotpoint="room:#Cafeteria-blockRoom4;points:Cafeteria-blockPoint4;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="40 -15 -15" rotation="-90 0 -60" hotpoint="room:#Cafeteria-blockRoom6;points:Cafeteria-blockPoint6;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="Cafeteria-blockPoint6" scale="0 0 0" data-sky="#Cafeteria-blockRoom6" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-40 -15 2" rotation="-90 0 110" hotpoint="room:#Cafeteria-blockRoom5;points:Cafeteria-blockPoint5;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="20 -20 10" rotation="-90 0 -100" hotpoint="room:#B-blockBottomRoom1;points:B-blockPoint1;"></a-image>
+                    </a-entity>
+                </a-entity>
+                <!-- Cafeteria-block END -->
+
+                <!-- B-BLOCK START -->
+                <a-entity id="B-block">
+                    
+                    <a-entity id="B-blockPoint1" scale="0 0 0" data-sky="#B-blockBottomRoom1" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="25 -25 1" rotation="-90 0 -80" hotpoint="room:#Cafeteria-blockRoom6;points:Cafeteria-blockPoint6;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="5 -25 -10" rotation="-90 0 10" hotpoint="room:#B-blockBottomRoom4;points:B-blockPoint4;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-40 -15 -2" rotation="-90 0 100" hotpoint="room:#B-blockBottomRoom2;points:B-blockPoint2;"></a-image>
+
+                    </a-entity>
+
+                    <a-entity id="B-blockPoint2" scale="0 0 0" data-sky="#B-blockBottomRoom2" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="40 -15 0" rotation="-90 0 -70" hotpoint="room:#B-blockBottomRoom1;points:B-blockPoint1;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-25 -25 -4" rotation="-90 0 100" hotpoint="room:#BBlockStairway-blockRoom4;points:BBlockStairway-blockPoint4;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-15 -25 5" rotation="-90 0 120" hotpoint="room:#B-blockBottomRoom3;points:B-blockPoint3;"></a-image>
+
+                    </a-entity>
+
+                    <a-entity id="B-blockPoint3" scale="0 0 0" data-sky="#B-blockBottomRoom3" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-20 -30 -20" rotation="-90 0 60" hotpoint="room:#B-blockBottomRoom2;points:B-blockPoint2;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="B-blockPoint4" scale="0 0 0" data-sky="#B-blockBottomRoom4" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-15 -20 -20" rotation="-90 0 50" hotpoint="room:#B-blockBottomRoom1;points:B-blockPoint1;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="50 -20 -35" rotation="-90 0 -40" hotpoint="room:#B-blockBottomRoom5;points:B-blockPoint5;"></a-image>
+
+                    </a-entity>
+
+                    <a-entity id="B-blockPoint5" scale="0 0 0" data-sky="#B-blockBottomRoom5" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-2 -20 60" rotation="-90 0 190" hotpoint="room:#B-blockBottomRoom4;points:B-blockPoint4;"></a-image>
+                    </a-entity>
+                </a-entity>
+                <!-- B-BLOCK END -->
+
+                <!-- AB-BLOCK START -->
+                <a-entity id="AB-block">
+                    
+                    <a-entity id="AB-blockPoint1" scale="0 0 0" data-sky="#AB-blockRoom1" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="20 -20 -5" rotation="-90 0 -60" hotpoint="room:#Cafeteria-blockRoom2;points:Cafeteria-blockPoint2"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-15 -20 -5" rotation="-90 0 80" hotpoint="room:#AB-blockRoom2;points:AB-blockPoint2"></a-image>
+                    </a-entity>
+
+                    <a-entity id="AB-blockPoint2" scale="0 0 0" data-sky="#AB-blockRoom2" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-20 -30 5" rotation="-90 0 100" hotpoint="room:#AB-blockRoom1;points:AB-blockPoint1"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="20 -30 -20" rotation="-90 0 -40" hotpoint="room:#AB-blockRoom3;points:AB-blockPoint3"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="40 -30 -50" rotation="-90 0 -30" hotpoint="room:#ConstructionDepartment-blockRoom1;points:ConstructionDepartment-blockPoint1;"></a-image>
+
+                    </a-entity>
+
+                    <a-entity id="AB-blockPoint3" scale="0 0 0" data-sky="#AB-blockRoom3" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-5 -30 10" rotation="-90 0 160" hotpoint="room:#AB-blockRoom2;points:AB-blockPoint2;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-5 -30 -10" rotation="-90 0 50" hotpoint="room:#AB-blockRoom4;points:AB-blockPoint4;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="AB-blockPoint4" scale="0 0 0" data-sky="#AB-blockRoom4" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-10 -15 -5" rotation="-90 0 70" hotpoint="room:#ComputingDepartment-blockRoom1;points:ComputingDepartment-blockPoint1;"></a-image> <!-- link to computing block -->
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="5 -15 -7" rotation="-90 0 -20" hotpoint="room:#AB-blockRoom3;points:AB-blockPoint3;"></a-image> <!-- link to computing block -->
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="30 -15 19" rotation="-90 0 -110" hotpoint="room:#AB-blockRoom5;points:AB-blockPoint5;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="AB-blockPoint5" scale="0 0 0" data-sky="#AB-blockRoom5" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="20 -30 5" rotation="-90 0 -100" hotpoint="room:#B-blockTopRoom1;points:B-top-departmentPoint1;"></a-image><!-- link to b block-->
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-35 -15 -12" rotation="-90 0 80" hotpoint="room:#AB-blockRoom4;points:AB-blockPoint4;"></a-image>
+
+                    </a-entity>
+                </a-entity>
+                <!-- AB-BLOCK END -->
+
+                 <!-- ConstructionDepartment-BLOCK START -->
+                 <a-entity id="ConstructionDepartment-block">
+                    
+                    <a-entity id="ConstructionDepartment-blockPoint1" scale="0 0 0" data-sky="#ConstructionDepartment-blockRoom1" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="40 -15 1" rotation="-90 0 -80" hotpoint="room:#ConstructionDepartment-blockRoom2;points:ConstructionDepartment-blockPoint2;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-20 -30 -1" rotation="-90 0 100" hotpoint="room:#AB-blockRoom2;points:AB-blockPoint2;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="ConstructionDepartment-blockPoint2" scale="0 0 0" data-sky="#ConstructionDepartment-blockRoom2" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="20 -15 -5" rotation="-90 0 -40" hotpoint="room:#ConstructionDepartment-blockRoom3;points:ConstructionDepartment-blockPoint3;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-35 -15 -5" rotation="-90 0 100" hotpoint="room:#ConstructionDepartment-blockRoom1;points:ConstructionDepartment-blockPoint1;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="ConstructionDepartment-blockPoint3" scale="0 0 0" data-sky="#ConstructionDepartment-blockRoom3" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-25 -15 0" rotation="-90 0 100" hotpoint="room:#ConstructionDepartment-blockRoom4;points:ConstructionDepartment-blockPoint4;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="8 -30 -13" rotation="-90 0 -10" hotpoint="room:#ConstructionDepartment-blockRoom2;points:ConstructionDepartment-blockPoint2;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="ConstructionDepartment-blockPoint4" scale="0 0 0" data-sky="#ConstructionDepartment-blockRoom4" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="15 -15 -25" rotation="-90 0 0" hotpoint="room:#ConstructionDepartment-blockRoom3;points:ConstructionDepartment-blockPoint3;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-10 -15 -22" rotation="-90 0 40" hotpoint="room:#ConstructionDepartment-blockRoom5;points:ConstructionDepartment-blockPoint5;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-30 -15 19" rotation="-90 0 140" hotpoint="room:#ConstructionDepartment-blockRoom7;points:ConstructionDepartment-blockPoint7;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="ConstructionDepartment-blockPoint5" scale="0 0 0" data-sky="#ConstructionDepartment-blockRoom5" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="30 -15 3" rotation="-90 0 -80" hotpoint="room:#ConstructionDepartment-blockRoom6;points:ConstructionDepartment-blockPoint6;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-30 -15 -3" rotation="-90 0 100" hotpoint="room:#ConstructionDepartment-blockRoom4;points:ConstructionDepartment-blockPoint4;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="ConstructionDepartment-blockPoint6" scale="0 0 0" data-sky="#ConstructionDepartment-blockRoom6" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-30 -15 -3" rotation="-90 0 100" hotpoint="room:#ConstructionDepartment-blockRoom5;points:ConstructionDepartment-blockPoint5;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="ConstructionDepartment-blockPoint7" scale="0 0 0" data-sky="#ConstructionDepartment-blockRoom7" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-40 -15 -15" rotation="-90 0 90" hotpoint="room:#ConstructionDepartment-blockRoom8;points:ConstructionDepartment-blockPoint8;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="40 -15 15" rotation="-90 0 -100" hotpoint="room:#ConstructionDepartment-blockRoom4;points:ConstructionDepartment-blockPoint4;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="ConstructionDepartment-blockPoint8" scale="0 0 0" data-sky="#ConstructionDepartment-blockRoom8" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-5 -15 -40" rotation="-90 0 30" hotpoint="room:#ConstructionDepartment-blockRoom9;points:ConstructionDepartment-blockPoint9;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="30 -15 -10" rotation="-90 0 -60" hotpoint="room:#ConstructionDepartment-blockRoom10;points:ConstructionDepartment-blockPoint10;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="10 -15 50" rotation="-90 0 -150" hotpoint="room:#ConstructionDepartment-blockRoom7;points:ConstructionDepartment-blockPoint7;"></a-image>
+
+                    </a-entity>
+
+                    <a-entity id="ConstructionDepartment-blockPoint9" scale="0 0 0" data-sky="#ConstructionDepartment-blockRoom9" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-50 -15 5" rotation="-90 0 100" hotpoint="room:#ConstructionDepartment-blockRoom11;points:ConstructionDepartment-blockPoint11;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="50 -15 -5" rotation="-90 0 -70" hotpoint="room:#ConstructionDepartment-blockRoom8;points:ConstructionDepartment-blockPoint8;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="ConstructionDepartment-blockPoint10" scale="0 0 0" data-sky="#ConstructionDepartment-blockRoom10" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-30 -15 -5" rotation="-90 0 90" hotpoint="room:#ConstructionDepartment-blockRoom8;points:ConstructionDepartment-blockPoint8;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="30 -15 -10" rotation="-90 0 -40" hotpoint="room:#ConstructionDepartment-blockRoom14;points:ConstructionDepartment-blockPoint14;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="30 -15 20" rotation="-90 0 -100" hotpoint="room:#ConstructionDepartment-blockRoom15;points:ConstructionDepartment-blockPoint15;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="10 -15 -30" rotation="-90 0 -10" hotpoint="room:#ConstructionDepartment-blockRoom17;points:ConstructionDepartment-blockPoint17;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="0 -15 30" rotation="-90 0 -180" hotpoint="room:#ConstructionDepartment-blockRoom16;points:ConstructionDepartment-blockPoint16;"></a-image>
+                    
+                        <a-image class="clickable" id="info9" src="#informationpoint" menu="title:Panel Dimension saw;description:Table saw used to rip, crosscut, trench rebate a range of materials. Sheet materials including plywood MDF and timber;" position="10 -2 -10" look-at="#camera">
+                            <a-text id="title" width="0.90" scale="0 0 0" height="0.60" baseline="top" position="-0.43 0.38 0.10" value="" wrap-count="25"></a-text>
+                            <a-text id="desc" width="0.80" scale="0 0 0" height="0.60" baseline="top" position="-0.43 0.25 0.10" value="" wrap-count="25"></a-text>
+                        </a-image>
+
+                    </a-entity>
+
+                    <a-entity id="ConstructionDepartment-blockPoint11" scale="0 0 0" data-sky="#ConstructionDepartment-blockRoom11" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-50 -15 -5" rotation="-90 0 100" hotpoint="room:#ConstructionDepartment-blockRoom12;points:ConstructionDepartment-blockPoint12;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="50 -15 -5" rotation="-90 0 -70" hotpoint="room:#ConstructionDepartment-blockRoom9;points:ConstructionDepartment-blockPoint9;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="ConstructionDepartment-blockPoint12" scale="0 0 0" data-sky="#ConstructionDepartment-blockRoom12" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-10 -15 -50" rotation="-90 0 40" hotpoint="room:#ConstructionDepartment-blockRoom13;points:ConstructionDepartment-blockPoint13;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="10 -15 50" rotation="-90 0 -150" hotpoint="room:#ConstructionDepartment-blockRoom11;points:ConstructionDepartment-blockPoint11;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="20 -30 -5" rotation="-90 0 -60" hotpoint="room:#A-B-Stairway-blockRoom1;points:A-B-Stairway-blockPoint1;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="ConstructionDepartment-blockPoint13" scale="0 0 0" data-sky="#ConstructionDepartment-blockRoom13" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="35 -15 -40" rotation="-90 0 -40" hotpoint="room:#ConstructionDepartment-blockRoom12;points:ConstructionDepartment-blockPoint12;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="ConstructionDepartment-blockPoint14" scale="0 0 0" data-sky="#ConstructionDepartment-blockRoom14" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-25 -15 -20" rotation="-90 0 70" hotpoint="room:#ConstructionDepartment-blockRoom10;points:ConstructionDepartment-blockPoint10;"></a-image>
+                        
+                        <a-image class="clickable" id="info3" src="#informationpoint" menu="title:Four-sided planer;description:Used to dress timber and remove rough cut surfaces on all four sides.;" position="15 -2 10" look-at="#camera">
+                            <a-text id="title" width="0.90" scale="0 0 0" height="0.60" baseline="top" position="-0.43 0.38 0.10" value="" wrap-count="25"></a-text>
+                            <a-text id="desc" width="0.80" scale="0 0 0" height="0.60" baseline="top" position="-0.43 0.25 0.10" value="" wrap-count="25"></a-text>
+                        </a-image>
+
+                        <a-image class="clickable" id="info4" src="#informationpoint" menu="title:Table saw;description:Used to rip wood along the length of the grain;" position="-10 -2 10" look-at="#camera">
+                            <a-text id="title" width="0.90" scale="0 0 0" height="0.60" baseline="top" position="-0.43 0.38 0.10" value="" wrap-count="25"></a-text>
+                            <a-text id="desc" width="0.80" scale="0 0 0" height="0.60" baseline="top" position="-0.43 0.25 0.10" value="" wrap-count="25"></a-text>
+                        </a-image>
+                    
+                    </a-entity>
+                    
+                    <a-entity id="ConstructionDepartment-blockPoint15" scale="0 0 0" data-sky="#ConstructionDepartment-blockRoom15" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-40 -15 0" rotation="-90 0 100" hotpoint="room:#ConstructionDepartment-blockRoom10;points:ConstructionDepartment-blockPoint10;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-15 -15 30" rotation="-90 0 150" hotpoint="room:#ConstructionDepartment-blockRoom16;points:ConstructionDepartment-blockPoint16;"></a-image>
+                        
+                        <a-image class="clickable" id="info5" src="#informationpoint" menu="title:Wood Lathe;description:Wood turning, spindle work and bowls;" position="10 -2 -12" look-at="#camera">
+                            <a-text id="title" width="0.90" scale="0 0 0" height="0.60" baseline="top" position="-0.43 0.38 0.10" value="" wrap-count="25"></a-text>
+                            <a-text id="desc" width="0.80" scale="0 0 0" height="0.60" baseline="top" position="-0.43 0.25 0.10" value="" wrap-count="25"></a-text>
+                        </a-image>
+
+                        <a-image class="clickable" id="info7" src="#informationpoint" menu="title:Vertical Spindle Moulder;description:Versatile machine used to cut, mould and shape timber;" position="0 -2 -15" look-at="#camera">
+                            <a-text id="title" width="0.90" scale="0 0 0" height="0.60" baseline="top" position="-0.43 0.38 0.10" value="" wrap-count="25"></a-text>
+                            <a-text id="desc" width="0.80" scale="0 0 0" height="0.60" baseline="top" position="-0.43 0.25 0.10" value="" wrap-count="25"></a-text>
+                        </a-image>
+
+                        <a-image class="clickable" id="info8" src="#informationpoint" menu="title:Bobbin Sander;description:Used to sand down curved work. Particularly timbers with an internal curve;" position="3 -6 -10" look-at="#camera">
+                            <a-text id="title" width="0.90" scale="0 0 0" height="0.60" baseline="top" position="-0.43 0.38 0.10" value="" wrap-count="25"></a-text>
+                            <a-text id="desc" width="0.80" scale="0 0 0" height="0.60" baseline="top" position="-0.43 0.25 0.10" value="" wrap-count="25"></a-text>
+                        </a-image>
+
+                    </a-entity>
+                    
+                    <a-entity id="ConstructionDepartment-blockPoint16" scale="0 0 0" data-sky="#ConstructionDepartment-blockRoom16" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-35 -15 -5" rotation="-90 0 100" hotpoint="room:#ConstructionDepartment-blockRoom10;points:ConstructionDepartment-blockPoint10;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="5 -15 -30" rotation="-90 0 10" hotpoint="room:#ConstructionDepartment-blockRoom15;points:ConstructionDepartment-blockPoint15;"></a-image>
+                        
+                        <a-image class="clickable" id="info6" src="#informationpoint" menu="title:Planer Thicknessor;description:Used to dress and size the timber to a desired thickness.;" position="-5 -2 -10" look-at="#camera">
+                            <a-text id="title" width="0.90" scale="0 0 0" height="0.60" baseline="top" position="-0.43 0.38 0.10" value="" wrap-count="25"></a-text>
+                            <a-text id="desc" width="0.80" scale="0 0 0" height="0.60" baseline="top" position="-0.43 0.25 0.10" value="" wrap-count="25"></a-text>
+                        </a-image>
+                    
+                    </a-entity>
+
+                    <a-entity id="ConstructionDepartment-blockPoint17" scale="0 0 0" data-sky="#ConstructionDepartment-blockRoom17" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-5 -15 -40" rotation="-90 0 0" hotpoint="room:#ConstructionDepartment-blockRoom10;points:ConstructionDepartment-blockPoint10;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="5 -15 40" rotation="-90 0 -150" hotpoint="room:#ConstructionDepartment-blockRoom18;points:ConstructionDepartment-blockPoint18;"></a-image>
+                    
+                        <a-image class="clickable" id="info11" src="#informationpoint" menu="title:Crosscut saw;description:Used to cut timber across the grain.;" position="10 -2 10" look-at="#camera">
+                            <a-text id="title" width="0.90" scale="0 0 0" height="0.60" baseline="top" position="-0.43 0.38 0.10" value="" wrap-count="25"></a-text>
+                            <a-text id="desc" width="0.80" scale="0 0 0" height="0.60" baseline="top" position="-0.43 0.25 0.10" value="" wrap-count="25"></a-text>
+                        </a-image>
+                    
+                    </a-entity>
+
+                    <a-entity id="ConstructionDepartment-blockPoint18" scale="0 0 0" data-sky="#ConstructionDepartment-blockRoom18" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-25 -15 17" rotation="-90 0 140" hotpoint="room:#ConstructionDepartment-blockRoom19;points:ConstructionDepartment-blockPoint19;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-25 -15 -15" rotation="-90 0 70" hotpoint="room:#ConstructionDepartment-blockRoom17;points:ConstructionDepartment-blockPoint17;"></a-image>
+                    
+                        <a-image class="clickable" id="info10" src="#informationpoint" menu="title:Vertical Spindle Moulder;description:Versatile machine used to cut, mould and shape timber.;" position="10 -2 10" look-at="#camera">
+                            <a-text id="title" width="0.90" scale="0 0 0" height="0.60" baseline="top" position="-0.43 0.38 0.10" value="" wrap-count="25"></a-text>
+                            <a-text id="desc" width="0.80" scale="0 0 0" height="0.60" baseline="top" position="-0.43 0.25 0.10" value="" wrap-count="25"></a-text>
+                        </a-image>
+                    
+                    </a-entity>
+
+                    <a-entity id="ConstructionDepartment-blockPoint19" scale="0 0 0" data-sky="#ConstructionDepartment-blockRoom19" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-25 -15 -25" rotation="-90 0 40" hotpoint="room:#ConstructionDepartment-blockRoom18;points:ConstructionDepartment-blockPoint18;"></a-image>
+                    
+                        <a-image class="clickable" id="info12" src="#informationpoint" menu="title:Band saw;description:Can be used to cut timber sheet materials etc. Can be used when doing curved cuts;" position="10 -2 -10" look-at="#camera">
+                            <a-text id="title" width="0.90" scale="0 0 0" height="0.60" baseline="top" position="-0.43 0.38 0.10" value="" wrap-count="25"></a-text>
+                            <a-text id="desc" width="0.80" scale="0 0 0" height="0.60" baseline="top" position="-0.43 0.25 0.10" value="" wrap-count="25"></a-text>
+                        </a-image>
+                    </a-entity>
+
+                </a-entity>
+                <!-- ConstructionDepartment-BLOCK END -->
+
+                <!-- A-B-Stairway-block START -->
+                <a-entity id="A-B-Stairway-block">
+                    
+                    <a-entity id="A-B-Stairway-blockPoint1" scale="0 0 0" data-sky="#A-B-Stairway-blockRoom1" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="15 -30 -5" rotation="-90 0 -50" hotpoint="room:#A-B-Stairway-blockRoom2;points:A-B-Stairway-blockPoint2;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="20 -30 -20" rotation="-90 0 -40" hotpoint="room:#ConstructionDepartment-blockRoom12;points:ConstructionDepartment-blockPoint12;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="A-B-Stairway-blockPoint2" scale="0 0 0" data-sky="#A-B-Stairway-blockRoom2" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-10 -30 10" rotation="-90 0 140" hotpoint="room:#A-B-Stairway-blockRoom3;points:A-B-Stairway-blockPoint3;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-10 -30 -10" rotation="-90 0 60" hotpoint="room:#A-B-Stairway-blockRoom1;points:A-B-Stairway-blockPoint1;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="A-B-Stairway-blockPoint3" scale="0 0 0" data-sky="#A-B-Stairway-blockRoom3" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-20 -30 10" rotation="-90 0 130" hotpoint="room:#ComputingDepartment-blockRoom8;points:ComputingDepartment-blockPoint8;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="5 -30 -15" rotation="-90 0 10" hotpoint="room:#A-B-Stairway-blockRoom2;points:A-B-Stairway-blockPoint2;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="30 -30 -10" rotation="-90 0 -60" hotpoint="room:#ComputingDepartment-blockRoom7;points:ComputingDepartment-blockPoint7;"></a-image>
+                    </a-entity>
+
+                </a-entity>
+                <!-- A-B-Stairway-block END -->
+
+                <!-- ComputingDepartment-block START -->
+                <a-entity id="ComputingDepartment-block">
+                    
+                    <a-entity id="ComputingDepartment-blockPoint1" scale="0 0 0" data-sky="#ComputingDepartment-blockRoom1" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-10 -15 3" rotation="-90 0 130" hotpoint="room:#ComputingDepartment-blockRoom2;points:ComputingDepartment-blockPoint2;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-40 -15 3" rotation="-90 0 110" hotpoint="room:#ComputingDepartment-blockRoom3;points:ComputingDepartment-blockPoint3;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="20 -15 -2" rotation="-90 0 -70" hotpoint="room:#AB-blockRoom4;points:AB-blockPoint4;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="ComputingDepartment-blockPoint2" scale="0 0 0" data-sky="#ComputingDepartment-blockRoom2" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-15 -15 20" rotation="-90 0 150" hotpoint="room:#ComputingDepartment-blockRoom1;points:ComputingDepartment-blockPoint1;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="ComputingDepartment-blockPoint3" scale="0 0 0" data-sky="#ComputingDepartment-blockRoom3" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-40 -15 -3" rotation="-90 0 90" hotpoint="room:#ComputingDepartment-blockRoom4;points:ComputingDepartment-blockPoint4;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="40 -15 4" rotation="-90 0 -90" hotpoint="room:#ComputingDepartment-blockRoom1;points:ComputingDepartment-blockPoint1;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="ComputingDepartment-blockPoint4" data-sky="#ComputingDepartment-blockRoom4" scale="0 0 0" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-20 -15 0" rotation="-90 0 100" hotpoint="room:#ComputingDepartment-blockRoom5;points:ComputingDepartment-blockPoint5;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="50 -15 0" rotation="-90 0 -80" hotpoint="room:#ComputingDepartment-blockRoom3;points:ComputingDepartment-blockPoint3;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="ComputingDepartment-blockPoint5" data-sky="#ComputingDepartment-blockRoom5" scale="0 0 0" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="40 -15 35" rotation="-90 0 -120" hotpoint="room:#ComputingDepartment-blockRoom6;points:ComputingDepartment-blockPoint6;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-13 -15 -10" rotation="-90 0 60" hotpoint="room:#ComputingDepartment-blockRoom4;points:ComputingDepartment-blockPoint4;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="17 -15 17" rotation="-90 0 -120" hotpoint="room:#ComputingDepartment-blockRoom11;points:ComputingDepartment-blockPoint11;"></a-image>
+                    </a-entity>
+                    
+                    <a-entity id="ComputingDepartment-blockPoint6" data-sky="#ComputingDepartment-blockRoom6" scale="0 0 0" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-40 -15 0" rotation="-90 0 100" hotpoint="room:#ComputingDepartment-blockRoom7;points:ComputingDepartment-blockPoint7;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="50 -15 -1" rotation="-90 0 -80" hotpoint="room:#ComputingDepartment-blockRoom5;points:ComputingDepartment-blockPoint5;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="ComputingDepartment-blockPoint7" data-sky="#ComputingDepartment-blockRoom7" scale="0 0 0" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="20 -15 20" rotation="-90 0 -120" hotpoint="room:#A-B-Stairway-blockRoom3;points:A-B-Stairway-blockPoint3;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-30 -15 -30" rotation="-90 0 60" hotpoint="room:#ComputingDepartment-blockRoom6;points:ComputingDepartment-blockPoint6;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="ComputingDepartment-blockPoint8" data-sky="#ComputingDepartment-blockRoom8" scale="0 0 0" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="13 -15 5" rotation="-90 0 -100" hotpoint="room:#ComputingDepartment-blockRoom9;points:ComputingDepartment-blockPoint9;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="30 -15 0" rotation="-90 0 -80" hotpoint="room:#ComputingDepartment-blockRoom10;points:ComputingDepartment-blockPoint10;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-20 -15 1" rotation="-90 0 100" hotpoint="room:#A-B-Stairway-blockRoom3;points:A-B-Stairway-blockPoint3;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="ComputingDepartment-blockPoint9" data-sky="#ComputingDepartment-blockRoom9" scale="0 0 0" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-10 -15 -30" rotation="-90 0 40" hotpoint="room:#ComputingDepartment-blockRoom8;points:ComputingDepartment-blockPoint8;"></a-image>
+                    </a-entity>
+                    
+                    <a-entity id="ComputingDepartment-blockPoint10" data-sky="#ComputingDepartment-blockRoom10" scale="0 0 0" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-20 -15 10" rotation="-90 0 120" hotpoint="room:#ComputingDepartment-blockRoom8;points:ComputingDepartment-blockPoint8;"></a-image>
+                    </a-entity>
+                    
+                    <a-entity id="ComputingDepartment-blockPoint11" data-sky="#ComputingDepartment-blockRoom11" scale="0 0 0" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="10 -15 30" rotation="-90 0 -130" hotpoint="room:#ComputingDepartment-blockRoom5;points:ComputingDepartment-blockPoint5;"></a-image>
+                    </a-entity>
+
+                </a-entity>
+                <!-- ComputingDepartment-block END -->
+
+                <!-- Btop-block START -->
+                <a-entity id="B-top-department">
+                    
+                    <a-entity id="B-top-departmentPoint1" scale="0 0 0" data-sky="#B-blockTopRoom1" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="15 -15 -3" rotation="-90 0 -70" hotpoint="room:#AB-blockRoom5;points:AB-blockPoint5;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-40 -15 6" rotation="-90 0 115" hotpoint="room:#B-blockTopRoom2;points:B-top-departmentPoint2;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="0 -30 -10" rotation="-90 0 20" hotpoint="room:#B-blockTopRoom8;points:B-top-departmentPoint8;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-20 -30 10" rotation="-90 0 140" hotpoint="room:#B-blockTopRoom10;points:B-top-departmentPoint10;"></a-image>
+
+
+                    </a-entity>
+
+                    <a-entity id="B-top-departmentPoint2" scale="0 0 0" data-sky="#B-blockTopRoom2" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-40 -15 1" rotation="-90 0 110" hotpoint="room:#B-blockTopRoom3;points:B-top-departmentPoint3;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="50 -15 -4" rotation="-90 0 -70" hotpoint="room:#B-blockTopRoom1;points:B-top-departmentPoint1;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="B-top-departmentPoint3" scale="0 0 0" data-sky="#B-blockTopRoom3" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="40 -15 10" rotation="-90 0 -90" hotpoint="room:#B-blockTopRoom2;points:B-top-departmentPoint2;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-40 -30 -9" rotation="-90 0 90" hotpoint="room:#B-blockTopRoom5;points:B-top-departmentPoint5;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-10 -30 5" rotation="-90 0 140" hotpoint="room:#B-blockTopRoom4;points:B-top-departmentPoint4;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="B-top-departmentPoint4" scale="0 0 0" data-sky="#B-blockTopRoom4" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="30 -15 -15" rotation="-90 0 40" hotpoint="room:#B-blockTopRoom3;points:B-top-departmentPoint3;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="B-top-departmentPoint5" scale="0 0 0" data-sky="#B-blockTopRoom5" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-20 -15 -1" rotation="-90 0 100" hotpoint="room:#B-blockTopRoom3;points:B-top-departmentPoint3;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="40 -15 0" rotation="-90 0 -80" hotpoint="room:#B-blockTopRoom6;points:B-top-departmentPoint6;"></a-image>
+
+                    </a-entity>
+
+                    <a-entity id="B-top-departmentPoint6" scale="0 0 0" data-sky="#B-blockTopRoom6" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="40 -15 -5" rotation="-90 0 -70" hotpoint="room:#B-blockTopRoom7;points:B-top-departmentPoint7;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-40 -15 5" rotation="-90 0 110" hotpoint="room:#B-blockTopRoom5;points:B-top-departmentPoint5;"></a-image>
+
+                    </a-entity>
+
+                    <a-entity id="B-top-departmentPoint7" scale="0 0 0" data-sky="#B-blockTopRoom7" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="25 -15 1" rotation="-90 0 -80" hotpoint="room:#BBlockStairway-blockRoom1;points:BBlockStairway-blockPoint1;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-40 -15 -1" rotation="-90 0 100" hotpoint="room:#B-blockTopRoom6;points:B-top-departmentPoint6;"></a-image>
+                    </a-entity>
+
+                    <!-- double room -->
+                    <a-entity id="B-top-departmentPoint8" scale="0 0 0" data-sky="#B-blockTopRoom8" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="45 -15 -5" rotation="-90 0 40" hotpoint="room:#B-blockTopRoom9;points:B-top-departmentPoint9;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-12 -15 -30" rotation="-90 0 40" hotpoint="room:#B-blockTopRoom1;points:B-top-departmentPoint1;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="B-top-departmentPoint9" scale="0 0 0" data-sky="#B-blockTopRoom9" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="20 -15 -30" rotation="-90 0 40" hotpoint="room:#B-blockTopRoom3;points:B-top-departmentPoint3;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-45 -15 0" rotation="-90 0 40" hotpoint="room:#B-blockTopRoom8;points:B-top-departmentPoint8;"></a-image>
+
+                    </a-entity>
+
+                    <a-entity id="B-top-departmentPoint10" scale="0 0 0" data-sky="#B-blockTopRoom10" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-10 -15 25" rotation="-90 0 40" hotpoint="room:#B-blockTopRoom1;points:B-top-departmentPoint1;"></a-image>
+
+                    </a-entity>
+                    <!---->
+
+                </a-entity>
+                <!-- A-B-Stairway-block END -->
+
+                <!-- BBlockStairway-block START -->
+                <a-entity id="BBlockStairway-block">
+                    <a-entity id="BBlockStairway-blockPoint1" scale="0 0 0" data-sky="#BBlockStairway-blockRoom1" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-10 -30 5" rotation="-90 0 120" hotpoint="room:#BBlockStairway-blockRoom2;points:BBlockStairway-blockPoint2;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-7 -30 30" rotation="-90 0 180" hotpoint="room:#B-blockTopRoom7;points:B-top-departmentPoint7;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="BBlockStairway-blockPoint2" scale="0 0 0" data-sky="#BBlockStairway-blockRoom2" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="5 -30 -10" rotation="-90 0 -20" hotpoint="room:#BBlockStairway-blockRoom3;points:BBlockStairway-blockPoint3;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="10 -30 10" rotation="-90 0 -100" hotpoint="room:#BBlockStairway-blockRoom1;points:BBlockStairway-blockPoint1;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="BBlockStairway-blockPoint3" scale="0 0 0" data-sky="#BBlockStairway-blockRoom3" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-20 -30 0" rotation="-90 0 100" hotpoint="room:#BBlockStairway-blockRoom2;points:BBlockStairway-blockPoint2;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="15 -30 0" rotation="-90 0 -80" hotpoint="room:#BBlockStairway-blockRoom4;points:BBlockStairway-blockPoint4;"></a-image>
+                    </a-entity>
+
+                    <a-entity id="BBlockStairway-blockPoint4" scale="0 0 0" data-sky="#BBlockStairway-blockRoom4" data-hotpoint-entities>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="-20 -30 0" rotation="-90 0 100" hotpoint="room:#BBlockStairway-blockRoom3;points:BBlockStairway-blockPoint3;"></a-image>
+                        <a-image class="clickable" src="#hotpoint" scale="5 5 5" position="20 -30 0" rotation="-90 0 -80" hotpoint="room:#B-blockBottomRoom2;points:B-blockPoint2;"></a-image>
+                    </a-entity>
+                </a-entity>
+                <!-- BBlockStairway-block END -->
+
+        </a-scene>
+
+    </div>
+    <!-- END OF VR MODEL -->
+    <!-- /////////////////////////////////////////////////////////////////////////////////////// -->
+
+    <!-- VR Dropdown tutorial -->
+    <section id="vr_tutorial">
+        <button id="toggle_button">
+            <i class="fa-solid fa-caret-down fa-2xl" style="color: #000000;"></i>
+            <span>VR Tutorial</span>
+        </button>
+        <div id="user_guide" class="hide">
+            <h2>User Guide:</h2>
+            <br>
+            <div class="user_controls">
+                <h4 class="p-subhead">Icons:</h4>
+                <ul>
+                    <li>
+                        <img src="img/Points/move_01.png" alt="info icon _ user guide">
+                        <span class="">: Move to next location</span>
+                    </li>
+                    <li>
+                        <img src="img/Points/info-blue2.png" alt="move location icon _ user guide">
+                        : Reveals information about object > Information box > Displays more details.
+                    </li>
+                    <li>
+                        <img src="img/Asset-Search/Search@3x.png" alt="search icon _ user guide">
+                        : Dropdown menu > Quick Search Navigation > Jump to locations fast.
+                    </li>
+                </ul>
+            </div>
+            <hr class="user_divider">
+            <div class="user_controls">
+                <h4 class="p-subhead">VR Gear:</h4>
+                <ul>
+                    <p>While using the VR Headset:</p>
+                    <ul>
+                        <li>
+                            <strong>Moving around -></strong>
+                        </li>
+                        <li> 
+                            while using the headset move your head any in direction to move the camera.
+                        </li>
+                        <br>
+                        <li>
+                            <strong>Hand Controls -></strong>
+                        </li>
+                        <li>
+                            Selecting icons will perform an action
+                        </li>
+                    </ul>
+                </ul>
+            </div>
+            <hr class="user_divider">
+            <div class="user_controls">
+                <h4 class="p-subhead">Desktop:</h4>
+                <ul>
+                    <p>While using the desktop version:</p>
+                    <li>
+                        <strong>Mouse Controls ></strong>
+                    </li>
+                    <li>
+                        Click and drag moves the cursor around the scene.
+                    </li>
+                    <li>
+                        hovering cursor over icons will interact with them.
+                    </li>
+                    <br>
+                    <li>
+                        W or <i class="fa-sharp fa-solid fa-arrow-up fa-xl" style="color: #000000;"></i>
+                        <span class="shift_left">This will move to the next location.</span>
+                    </li>
+                    <li>
+                        S or <i class="fa-sharp fa-solid fa-arrow-down fa-xl" style="color: #000000;"></i>
+                        <span class="shift_left">This will move to the previous location.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="uhi_footer">
+        <div class="footer__links">
+            <div class="site">
+                <p>Site Links</p>
+                <ul>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact us</a></li>
+                    <li><a href="#">Cookies</a></li>
+                    <li><a href="#">Donate to UHI</a></li>
+                    <li><a href="#">Freedom of information</a></li>
+                    <li><a href="#">Gaelic</a></li>
+                    <li><a href="#">News and events</a></li>
+                    <li><a href="#">Open days</a></li>
+                    <li><a href="#">Vacancies</a></li>
+                </ul>
+            </div>
+            <div class="partners">
+                <p>Partners</p>
+                <ul>
+                    <li><a href="#">UHI Argyll</a></li>
+                    <li><a href="#">UHI Inverness</a></li>
+                    <li><a href="#">UHI Moray</a></li>
+                    <li><a href="#">UHI North Highland</a></li>
+                    <li><a href="#">UHI Orkney</a></li>
+                    <li><a href="#">UHI Outer Hebrides</a></li>
+                    <li><a href="#">UHI Perth</a></li>
+                    <li><a href="#">UHI Shetland</a></li>
+                    <li><a href="#">UHI West Highland</a></li>
+                    <li><a href="#">HTC</a></li>
+                    <li><a href="#">Sabhal Mòr Ostaig</a></li>
+                    <li><a href="#">Scottish Association for Marine Science</a></li>
+                </ul>
+                <p>
+                    <em>
+                        <a href="#" class="footer-highlight">UHI</a>
+                        is a diverse and flexible partnership serving
+                        our communities and connected
+                        to their needs. 
+                    </em>
+                </p>
+            </div>
+        </div>
+        <div class="footer__socialdesk">
+            <ul>
+                <li><a href="#"><i class="fa-brands fa-facebook fa-2xl"></i></a></li>
+                <li><a href="#"><i class="fa-brands fa-square-twitter fa-2xl"></i></a></li>
+                <li><a href="#"><i class="fa-brands fa-instagram fa-2xl"></i></a></li>
+                <li><a href="#"><i class="fa-brands fa-youtube fa-2xl"></i></a></li>
+                <li><a href="#"><i class="fa-brands fa-linkedin fa-2xl"></i></a></li>
+            </ul>
+            <div class="servicedesk">
+                <p>
+                    <a href="#">Service desk</a>
+                </p>
+            </div>
+        </div>
+        <hr>
+        <div class="footer__statement">
+            <div class="address">
+                <p>
+                    © UHI
+                    <br>
+                    Registered office: 12b Ness Walk, Inverness, Scotland, IV3 5SQ
+                    <br>
+                    <a href="#">Contact us</a>
+                    <a href="#">Accessibility Statement</a>
+                </p>
+            </div>
+            <div class="charity">
+                <p>
+                    University of the Highlands and Islands, UHI, their Gaelic equivalents
+                    and the mountains and water device are all trademarks
+                    and/or registered trademarks of the 
+                    University of the Highlands and Islands.
+                    Limited company registered in Scotland No.
+                    148203. Registered Scottish Charity No.
+                    SC022228, VAT No. 663990005.
+                </p>
+            </div>
+        </div>
+    </footer>
+  </body>
+
+  <!-- Toggle button - open/close user guide -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function(){
+        const toggleButton = document.getElementById('toggle_button');
+
+        toggleButton.addEventListener('click', function(){
+            const guide = document.getElementById('user_guide');
+            const icon = document.querySelector('#toggle_button i');
+
+            if(guide.classList.contains('hide')){
+                guide.classList.remove('hide');
+                toggleButton.classList.add('active');
+                icon.style.transform = 'rotate(180deg)';
+            } else{
+                guide.classList.add('hide');
+                toggleButton.classList.remove('active');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        });
+    });
+  </script>
+
+</html>
