@@ -19,6 +19,13 @@ AFRAME.registerComponent('hotpoint', {
         this.setSky = function() {
             var sky = document.querySelector('#img-360');
             sky.setAttribute("src", newSky);
+
+            // Add these lines to update the current entity display text
+            const camera = document.querySelector('[camera]');
+            const currentEntityDisplay = camera.components['current-entity-display'];
+            if (currentEntityDisplay) {
+            currentEntityDisplay.updateCurrentEntity();
+            }
         }
 
         this.setHidden = function() {
@@ -39,7 +46,7 @@ AFRAME.registerComponent('hotpoint', {
             this.setSky;
             this.setVisible;
         }
-        // Clean up add signle addEventListener to main - 
+
         this.el.addEventListener('click', this.setSky);
         this.el.addEventListener('click', this.setHidden);
         this.el.addEventListener('click', this.setVisible);
@@ -51,7 +58,5 @@ AFRAME.registerComponent('hotpoint', {
         this.el.removeEventListener('click', this.setHidden);
         this.el.removeEventListener('click', this.setVisible);
     }
-})
-
 })
 

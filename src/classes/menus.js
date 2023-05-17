@@ -1,4 +1,3 @@
-
 /*
     Development build version: 0.1
     Build date: 02/03/2023
@@ -19,8 +18,6 @@ AFRAME.registerComponent('menu', {
         var desc_background = "#informationpointBackground";
         var hotpointfile = "#informationpoint";
         
-        console.log(this.el.getAttribute("position"));
-
         function setInformation(current_information_point) {
             // Replace Hotpoint Icon for information box
             var hotpoint = document.querySelector('#'+current_information_point);
@@ -70,6 +67,7 @@ AFRAME.registerComponent('menu', {
                 setInformationIcon(element);
 
             } else {
+                var current_information_point = this.getAttribute("id");
                 setInformation(element);
             }
         }
